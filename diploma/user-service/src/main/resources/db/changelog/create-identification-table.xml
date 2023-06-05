@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="03" author="Churai Evgeniy">
+        <createTable tableName="identification">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="identification_id_pk"/>
+            </column>
+            <column name="identity_document" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="series_and_document_number" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="who_issued_document" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="when_document_was_issued" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="identification" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

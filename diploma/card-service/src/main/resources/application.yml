@@ -1,0 +1,28 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: card-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/card_db
+    username: postgres
+    password: 27112001jeka
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    change-log: db/changelog/changelog-master.xml
+
+STRIPE_SECRET_KEY: sk_test_51MqBt7Cl0EwdlG8RyHhLMZhIvkGiYNhCVnJTvsRm2nM0zB8ugjFVsk8McbraB8VDVjdF96qRdTFCQ9wnScOnH4hC00XYf6tUiX
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

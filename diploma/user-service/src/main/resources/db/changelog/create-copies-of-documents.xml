@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="02" author="Churai Evgeniy">
+        <createTable tableName="copies_of_documents">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="copies_of_documents_id_pk"/>
+            </column>
+            <column name="copy_of_document_page_with_photo" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="copy_of_document_page_with_personal_number" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="copy_of_page_of_document_residence_permit" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="copies_of_documents" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

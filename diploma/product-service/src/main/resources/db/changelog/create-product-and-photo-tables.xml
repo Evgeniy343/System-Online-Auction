@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="01" author="Churai Evgeniy">
+        <createTable tableName="photo">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="photo_id_pk"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="product_id" type="bigint">
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="photo" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="02" author="Churai Evgeniy">
+        <createTable tableName="product">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="product_id_pk"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="product" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="03" author="Churai Evgeniy">
+        <addForeignKeyConstraint baseTableName="photo"
+                                 baseColumnNames="product_id"
+                                 constraintName="photo_product_id_fk"
+                                 referencedTableName="product"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

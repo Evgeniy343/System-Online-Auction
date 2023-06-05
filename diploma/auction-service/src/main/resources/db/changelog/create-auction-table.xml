@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="04" author="Churai Evgeniy">
+        <createTable tableName="auction">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="auction_id_pk"/>
+            </column>
+            <column name="initial_rate" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deposit_amount" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="full_payment_term" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trading_start_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trading_close_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="auction" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
+    </changeSet>
+</databaseChangeLog>

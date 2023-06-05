@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="01" author="Churai Evgeniy">
+        <createTable tableName="auction_user">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="auction_user_id_pk"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronymic" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="auction_user_email_unq"/>
+            </column>
+            <column name="phone_number" type="varchar(20)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="auction_user_phone_number_unq"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="auction_user_password_unq"/>
+            </column>
+            <column name="role" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo" type="varchar(255)"/>
+            <column name="copies_of_documents_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="identification_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="registration_address_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="requisites_for_return_of_deposit_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="auction_user" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="06" author="Churai Evgeniy">
+        <addForeignKeyConstraint baseTableName="auction_user"
+                                 baseColumnNames="copies_of_documents_id"
+                                 constraintName="auction_user_copies_of_documents_id_fk"
+                                 referencedTableName="copies_of_documents"
+                                 referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="auction_user"
+                                 baseColumnNames="identification_id"
+                                 constraintName="auction_user_identification_id_fk"
+                                 referencedTableName="identification"
+                                 referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="auction_user"
+                                 baseColumnNames="registration_address_id"
+                                 constraintName="auction_user_registration_address_id_fk"
+                                 referencedTableName="registration_address"
+                                 referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="auction_user"
+                                 baseColumnNames="requisites_for_return_of_deposit_id"
+                                 constraintName="auction_user_requisites_for_return_of_deposit_id_fk"
+                                 referencedTableName="requisites_for_return_of_deposit"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

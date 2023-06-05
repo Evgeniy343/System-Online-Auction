@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="05" author="Churai Evgeniy">
+        <createTable tableName="requisites_for_return_of_deposit">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="requisites_for_return_of_deposit_id_pk"/>
+            </column>
+            <column name="bank_address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bank_code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bank_name_and_branch_number" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="current_account_number" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="requisites_for_return_of_deposit" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

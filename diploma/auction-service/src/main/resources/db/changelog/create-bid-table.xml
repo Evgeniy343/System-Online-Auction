@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="10" author="Churai Evgeniy">
+        <createTable tableName="bid">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="bid_id_pk"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="suggested_price" type="varchar(50)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="auction_id" type="bigint">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="auction" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+    </changeSet>
+    <changeSet id="11" author="Churai Evgeniy">
+        <addForeignKeyConstraint baseTableName="bid"
+                                 baseColumnNames="auction_id"
+                                 constraintName="bid_auction_id"
+                                 referencedTableName="auction"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+
+    </changeSet>
+</databaseChangeLog>

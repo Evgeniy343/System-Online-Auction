@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="04" author="Churai Evgeniy">
+        <createTable tableName="card">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="card_id_pk"/>
+            </column>
+            <column name="card_number" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="owner_name" type="varchar(70)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_surname" type="varchar(70)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="before_date" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="card" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+</databaseChangeLog>

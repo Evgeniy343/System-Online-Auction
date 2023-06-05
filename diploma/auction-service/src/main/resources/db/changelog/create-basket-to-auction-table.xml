@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="07" author="Churai Evgeniy">
+        <createTable tableName="basket_auction">
+            <column name="basket_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auction_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="basket" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1"/>
+        <addUniqueConstraint tableName="basket_auction" columnNames="auction_id, basket_id"/>
+    </changeSet>
+
+    <changeSet id="08" author="Churai Evgeniy">
+        <addForeignKeyConstraint baseTableName="basket_auction"
+                                 baseColumnNames="basket_id"
+                                 constraintName="basket_auction_basket_id_fk"
+                                 referencedTableName="basket"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="basket_auction"
+                                 baseColumnNames="auction_id"
+                                 constraintName="basket_auction_auction_id_fk"
+                                 referencedTableName="auction"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+    </changeSet>
+
+</databaseChangeLog>
