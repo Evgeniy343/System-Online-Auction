@@ -41,7 +41,7 @@ public class AuctionController {
                                                      @RequestHeader("role") String role,
                                                      @PathVariable @Min(0) Long id) {
         AuctionDTO auctionDTO = auctionService.findById(id);
-        if (auctionDTO.getTradingCloseTime().compareTo(obtainCurrentDateAndTime()) > 0) {
+        if (auctionDTO.getTradingCloseTime().compareTo(obtainCurrentDateAndTime()) < 0) {
             auctionDTO.setStatus(Status.COMPLETED);
         }
         ResponseEntity<ProductDTO> response = template.exchange(
@@ -113,19 +113,24 @@ public class AuctionController {
                                                     @RequestHeader("role") String role,
                                                     @PathVariable @Min(0) Long id) {
         Long productId = auctionService.delete(id);
-        ResponseEntity<String> response = template.exchange(
-                "http://localhost:8084/api/v1/products/" + productId,
-                HttpMethod.DELETE,
-                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
-                String.class
-        );
+        deleteProduct(userId, role, productId);
         return new ResponseEntity<>(String.format(AUCTION_DELETED_MESSAGE, id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteAllAuctionsByUserId(@RequestHeader("id") Long userId,
+                                          @RequestHeader("role") String role, @PathVariable Long id) {
+        List<AuctionDTO> userAuctions = auctionService.findAllByUserId(id);
+        for (AuctionDTO userAuction : userAuctions) {
+            deleteProduct(userId,role,userAuction.getProduct().getId());
+        }
+        auctionService.deleteAllByUserId(id);
     }
 
     private List<AuctionDTO> checkStatusOfAuctions(List<AuctionDTO> auctions) {
         Timestamp currentDateAndTime = obtainCurrentDateAndTime();
         auctions = auctions.stream().map(auctionDTO -> {
-                    if (auctionDTO.getTradingCloseTime().compareTo(currentDateAndTime) > 0) {
+                    if (auctionDTO.getTradingCloseTime().compareTo(currentDateAndTime) < 0) {
                         auctionDTO.setStatus(Status.COMPLETED);
                     }
                     return auctionDTO;
@@ -167,5 +172,14 @@ public class AuctionController {
                 }
             }
         }
+    }
+
+    private void deleteProduct(Long userId, String role, Long productId) {
+        ResponseEntity<String> response = template.exchange(
+                "http://localhost:8084/api/v1/products/" + productId,
+                HttpMethod.DELETE,
+                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
+                String.class
+        );
     }
 }

@@ -249,3 +249,7 @@ header .shop-cart .item .delete-icon:hover {
     transform: scale(1.05);
 }
 
+.auction_button {
+    margin: 10px;
+}
+

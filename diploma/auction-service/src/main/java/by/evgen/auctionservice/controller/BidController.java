@@ -96,6 +96,12 @@ public class BidController {
         return new ResponseEntity<>(String.format(BID_DELETED_MESSAGE, id), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteAllBidsByUserId(@RequestHeader("id") Long userId,
+                                          @RequestHeader("role") String role, @PathVariable Long id) {
+        bidService.deleteAllByUserId(id);
+    }
+
     private HttpHeaders createHeadersForSecurity(Long userId, String role) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("id", userId.toString());

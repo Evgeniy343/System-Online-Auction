@@ -14,6 +14,11 @@ class AuthenticationService {
         var token = axios.post(AUTHENTICATION_BASE_REST_API_URL + "/token", userData)
         return token
     }
+
+    refreshToken() {
+        var token = localStorage.getItem("jwt_token");
+        return axios.post(AUTHENTICATION_BASE_REST_API_URL + `/refreshToken?token=${token}`)
+    }
 }
 
 export default new AuthenticationService()

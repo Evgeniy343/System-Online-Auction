@@ -5,11 +5,11 @@ import Select from "react-select";
 
 function Section4(props) {
 
-    const selectOptions = [
-        {value: "PASSPORT", label: "PASSPORT"},
-        {value: "RESIDENCE PERMIT", label: "RESIDENCE PERMIT"},
-        {value: "REFUGEE CERTIFICATE", label: "REFUGEE CERTIFICATE"}
-    ];
+    const optionsDocument = [
+        { id: 1, title: 'PASSPORT' },
+        { id: 2, title: 'RESIDENCE PERMIT' },
+        { id: 3, title: 'REFUGEE CERTIFICATE' },
+    ]
 
     return (
         <Container>
@@ -18,19 +18,28 @@ function Section4(props) {
                     <Form.Label>Identity document</Form.Label>
                     <Controller
                         control={props.control}
+                        defaultValue={""}
                         name="identification.identityDocument"
-                        render={
-                            ({field, fieldState}) => (
-                                <FormControl
-                                    {...field}
-                                    type={"text"}
-                                    multiline={false}
-                                    helperText={fieldState.error?.message || " "}
-                                    error={!!fieldState.error}
+                        render={({ field }) => {
+                            console.log(field)
+                            const { onChange, value, name, ref } = field
+                            return (
+                                <Select
+                                    name={name}
+                                    inputRef={ref}
+                                    options={optionsDocument}
+                                    value={optionsDocument.find((c) => c.id === value)}
+                                    onChange={(val) => {
+                                        onChange(val)
+                                    }}
+                                    getOptionValue={(option) => option.id}
+                                    getOptionLabel={(option) => option.title}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
                                 />
                             )
-                        }
-                    ></Controller>
+                        }}
+                    />
                 </Form.Group>
             </Row>
             <Row>

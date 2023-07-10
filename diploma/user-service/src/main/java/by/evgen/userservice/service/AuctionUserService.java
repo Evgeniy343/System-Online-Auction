@@ -56,9 +56,10 @@ public class AuctionUserService {
         return userMapper.convertAuctionUserToAuctionUserDTO(updatedUser);
     }
 
-    public void delete(Long id) {
+    public AuctionUserDTO delete(Long id) {
         AuctionUser auctionUser = userRepository.findById(id).orElseThrow(() ->
                 new AuctionUserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
         userRepository.deleteById(id);
+        return userMapper.convertAuctionUserToAuctionUserDTO(auctionUser);
     }
 }

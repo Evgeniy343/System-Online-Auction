@@ -48,6 +48,12 @@ function Register(props) {
     });
 
     const onSubmit = data => {
+        data.registrationAddress.country = data.registrationAddress.country.title
+        data.identification.identityDocument = data.identification.identityDocument.title
+        var avatar = data.photo.substring(12,data.photo.length);
+        data.photo = avatar
+        console.log(avatar)
+        console.log("Data - " + data)
         props.onRegister(data)
     };
 

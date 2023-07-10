@@ -16,7 +16,7 @@ function ShowFullAuctionInfo(props) {
                 <b><label className="auction_field"><b>Trading close time: </b></label>{props.fullAuctionInfo.tradingCloseTime}</b>
                 <p> <label className="auction_field"><b>Description: </b></label>{props.fullAuctionInfo.product.description}</p>
                 <b><label className="auction_field"><b>Status: </b></label>{props.fullAuctionInfo.status}</b>
-                <div className="add-to-cart" onClick={() => props.onAdd(props.fullAuctionInfo)}>+</div>
+                <div className="add-to-cart" onClick={() => props.addToBasket(props.fullAuctionInfo.id)}>+</div>
             </div>
         </div>
     );

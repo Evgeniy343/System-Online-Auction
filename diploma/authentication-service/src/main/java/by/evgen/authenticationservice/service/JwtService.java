@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,11 +45,19 @@ public class JwtService {
 
     public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
-        return userName.equals(userDetails.getUsername()) || !isTokenExpired(token);
+        return userName.equals(userDetails.getUsername());
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public boolean isTokenExpired(String expiration) {
+        Date tokenDate =  new Date(Long.parseLong(expiration) * 1000);
+        System.out.println(tokenDate);
+
+        Calendar date = Calendar.getInstance();
+        System.out.println("Current Date and TIme : " + date.getTime());
+        long timeInSecs = date.getTimeInMillis();
+        Date afterAdding5Mins = new Date(timeInSecs + (5 * 60 * 1000));
+        System.out.println("After adding 5 mins : " + afterAdding5Mins);
+        return afterAdding5Mins.before(tokenDate);
     }
 
     private Date extractExpiration(String token) {

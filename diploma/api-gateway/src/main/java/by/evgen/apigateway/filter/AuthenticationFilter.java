@@ -48,7 +48,6 @@ public class AuthenticationFilter implements WebFilter {
                                     .toEntity(UserDetailsResponse.class)
                                     .block();
 
-
                             UserDetailsResponse body = response.getBody();
                             exchange.mutate().request(
                                     exchange.getRequest().mutate()

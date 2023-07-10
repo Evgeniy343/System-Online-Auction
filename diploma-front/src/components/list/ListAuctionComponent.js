@@ -8,7 +8,9 @@ const ListAuctionComponent = (props) => {
         <main>
             {props.auctions.map(auction => (
                     <AuctionComponent onShowFullAuctionInfo={props.onShowFullAuctionInfo} key={auction.id}
-                                      auction={auction} onAdd={props.onAdd}/>
+                                      auction={auction} addToBasket={props.addToBasket}
+                                      showAddToBasket={props.showAddToBasket} createBid={props.createBid}
+                                      showPay={props.showPay}/>
                 )
             )}
         </main>

@@ -25,6 +25,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers(HttpMethod.GET, "/api/v1/auctions/**").permitAll()
+                        .antMatchers("/api/v1/basket/delete/**").hasAuthority("ADMIN")
+                        .antMatchers("/api/v1/bids/delete/**").hasAuthority("ADMIN")
                         .antMatchers("/api/v1/bids/**", "/api/v1/basket/**").hasAuthority("USER")
                         .antMatchers("/api/v1/auctions/**").hasAnyAuthority("ADMIN", "USER")
                 )

@@ -1,12 +1,14 @@
 package by.evgen.userservice.controller;
 
 import by.evgen.userservice.dto.AuctionUserDTO;
+import by.evgen.userservice.model.Role;
 import by.evgen.userservice.service.AuctionUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -21,6 +23,7 @@ public class AuctionUserController {
     private static final String AUCTION_USER_UPDATED_MESSAGE = "Auction user with id - %s has been updated!";
     private static final String AUCTION_USER_SAVED_MESSAGE = "Auction user has been saved!";
     private final AuctionUserService userService;
+    private final RestTemplate template;
 
 
     @RequestMapping(value = "/hello-user", method = RequestMethod.GET)
@@ -48,7 +51,17 @@ public class AuctionUserController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<String> saveAuctionUser(@Valid @RequestBody AuctionUserDTO auctionUserDTO) {
-        userService.save(auctionUserDTO);
+        AuctionUserDTO savedUser = userService.save(auctionUserDTO);
+        if (!savedUser.getRole().equals(Role.ADMIN)) {
+            template.exchange(
+                    "http://localhost:8085/api/v1/basket/create",
+                    HttpMethod.POST,
+                    new HttpEntity<>("some body",
+                            createHeadersForSecurity(savedUser.getId(), savedUser.getRole().name())),
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+        }
         return new ResponseEntity<>(String.format(AUCTION_USER_SAVED_MESSAGE), HttpStatus.OK);
     }
 
@@ -60,8 +73,43 @@ public class AuctionUserController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteAuctionUserById(@PathVariable @Min(0) Long id) {
-        userService.delete(id);
+    public ResponseEntity<String> deleteAuctionUserById(@RequestHeader("id") Long userId,
+                                                        @RequestHeader("role") String role,
+                                                        @PathVariable @Min(0) Long id) {
+        AuctionUserDTO deletedUser = userService.delete(id);
+        if (!deletedUser.getRole().equals(Role.ADMIN)) {
+            template.exchange(
+                    "http://localhost:8085/api/v1/basket/delete/"+ id,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>("some body",
+                            createHeadersForSecurity(userId, role)),
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            template.exchange(
+                    "http://localhost:8085/api/v1/auctions/delete/" + id,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>("some body",
+                            createHeadersForSecurity(userId, role)),
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            template.exchange(
+                    "http://localhost:8085/api/v1/bids/delete/" + id,
+                    HttpMethod.DELETE,
+                    new HttpEntity<>("some body",
+                            createHeadersForSecurity(userId, role)),
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+        }
         return new ResponseEntity<>(String.format(AUCTION_USER_DELETED_MESSAGE, id), HttpStatus.OK);
+    }
+
+    private HttpHeaders createHeadersForSecurity(Long userId, String role) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("id", userId.toString());
+        headers.set("role", role);
+        return headers;
     }
 }

@@ -71,4 +71,9 @@ public class BidService {
                 new BidNotFoundException(String.format(BID_NOT_FOUND_MESSAGE, id)));
         bidRepository.deleteById(id);
     }
+
+    @Transactional
+    public void deleteAllByUserId(Long userId){
+        bidRepository.deleteAllByUserId(userId);
+    }
 }

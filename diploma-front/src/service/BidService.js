@@ -4,31 +4,40 @@ const BID_BASE_REST_API_URL = "http://localhost:8765/auction-service/bids"
 
 class BidService {
     getBids() {
-        var data = axios.get(BID_BASE_REST_API_URL)
+        var token = localStorage.getItem("jwt_token");
+        var data = axios.get(BID_BASE_REST_API_URL, {headers: {Authorization: `Bearer ${token}`}})
         console.log(data)
         return data
     }
 
     getUserBids() {
-        var data = axios.get(BID_BASE_REST_API_URL + "/my")
+        var token = localStorage.getItem("jwt_token");
+        var data = axios.get(BID_BASE_REST_API_URL + "/my", {headers: {Authorization: `Bearer ${token}`}})
         console.log(data)
         return data
     }
 
-    saveBid(bid) {
-        return axios.post(BID_BASE_REST_API_URL, bid)
+    saveBid(auctionId, suggestedPrice) {
+        var token = localStorage.getItem("jwt_token");
+        return axios.post(BID_BASE_REST_API_URL + `?auctionId=${auctionId}&suggested_price=${suggestedPrice}`,
+            null, {headers: {Authorization: `Bearer ${token}`}})
     }
 
     getBidById(bidId) {
-        return axios.get(BID_BASE_REST_API_URL + "/" + bidId)
+        var token = localStorage.getItem("jwt_token");
+        return axios.get(BID_BASE_REST_API_URL + `/${bidId}`, {headers: {Authorization: `Bearer ${token}`}})
     }
 
-    updateBidById(bidId, bid) {
-        return axios.put(BID_BASE_REST_API_URL + "/" + bidId, bid)
+    editBidById(auctionId, suggestedPrice, bidId) {
+        var token = localStorage.getItem("jwt_token");
+        return axios.put(BID_BASE_REST_API_URL + `/${bidId}?auctionId=${auctionId}&suggested_price=${suggestedPrice}`,
+            null, {headers: {Authorization: `Bearer ${token}`}})
     }
 
     deleteBidById(bidId) {
-        return axios.delete(BID_BASE_REST_API_URL + "/" + bidId)
+        var token = localStorage.getItem("jwt_token");
+        return axios.delete(BID_BASE_REST_API_URL + `/${bidId}`,
+            {headers: {Authorization: `Bearer ${token}`}})
     }
 }
 

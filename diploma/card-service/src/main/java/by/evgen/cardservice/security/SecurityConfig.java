@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/api/v1/cards/**", "/api/v1/payment/**").hasAuthority("USER")
+                        .antMatchers("/api/v1/cards/**", "/api/v1/payment").hasAuthority("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

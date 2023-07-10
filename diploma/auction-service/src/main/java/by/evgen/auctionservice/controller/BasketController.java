@@ -54,6 +54,11 @@ public class BasketController {
         basketService.createBasket(userId);
     }
 
+    @RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
+    public void deleteBasket(@PathVariable Long userId) {
+        basketService.deleteBasketByUserId(userId);
+    }
+
     private HttpHeaders createHeadersForSecurity(Long userId, String role) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("id", userId.toString());

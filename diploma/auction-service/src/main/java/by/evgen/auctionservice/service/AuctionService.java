@@ -20,11 +20,15 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
     private final AuctionMapper auctionMapper;
 
+
+    @Transactional
     public AuctionDTO findById(Long id) {
         Auction auction = auctionRepository.findById(id).orElseThrow(() ->
                 new AuctionNotFoundException(String.format(AUCTION_NOT_FOUND_MESSAGE, id)));
         return auctionMapper.convertAuctionToAuctionDTO(auction);
     }
+
+    @Transactional
 
     public List<AuctionDTO> findAll() {
         List<AuctionDTO> auctions = auctionRepository.findAll()
@@ -37,6 +41,8 @@ public class AuctionService {
             return auctions;
         }
     }
+
+    @Transactional
 
     public List<AuctionDTO> findAllByUserId(Long userId) {
         List<AuctionDTO> auctions = auctionRepository.findAllByUserId(userId)
@@ -58,6 +64,7 @@ public class AuctionService {
         return auctionMapper.convertAuctionToAuctionDTO(savedAuction);
     }
 
+    @Transactional
     public Long update(AuctionDTO auctionDTO, Long id) {
         Auction auction = auctionRepository.findById(id).orElseThrow(() ->
                 new AuctionNotFoundException(String.format(AUCTION_NOT_FOUND_MESSAGE, id)));
@@ -72,5 +79,10 @@ public class AuctionService {
                 new AuctionNotFoundException(String.format(AUCTION_NOT_FOUND_MESSAGE, id)));
         auctionRepository.deleteById(id);
         return auction.getProductId();
+    }
+
+    @Transactional
+    public void deleteAllByUserId(Long userId){
+        auctionRepository.deleteAllByUserId(userId);
     }
 }

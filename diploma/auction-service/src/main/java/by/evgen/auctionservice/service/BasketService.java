@@ -9,6 +9,7 @@ import by.evgen.auctionservice.repository.AuctionRepository;
 import by.evgen.auctionservice.repository.BasketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +43,18 @@ public class BasketService {
             Basket basket = optionalBasket.get();
             Auction auction = auctionRepository.findById(auctionId).orElseThrow(() ->
                     new AuctionNotFoundException(String.format(AUCTION_NOT_FOUND_MESSAGE, auctionId)));
-            basket.getAuctions().add(auction);
-            basketRepository.save(basket);
+            if (basket.getAuctions().contains(auction)) {
+                System.out.println("This auction is already in basket");
+            } else {
+                basket.getAuctions().add(auction);
+                basketRepository.save(basket);
+            }
         }
+    }
+
+    @Transactional
+    public void deleteBasketByUserId(Long userId){
+        basketRepository.deleteBasketByUserId(userId);
     }
 
     public BasketDTO getBasketByUserId(Long userId) {

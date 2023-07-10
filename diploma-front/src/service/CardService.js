@@ -4,27 +4,31 @@ const CARD_BASE_REST_API_URL = "http://localhost:8765/card-service/cards"
 
 class CardService {
     getCards() {
-        return axios.get(CARD_BASE_REST_API_URL)
-    }
-
-    getUserCards() {
-        return axios.get(CARD_BASE_REST_API_URL + "/my")
+        var token = localStorage.getItem("jwt_token");
+        return axios.get(CARD_BASE_REST_API_URL,{headers: {Authorization: `Bearer ${token}`}})
     }
 
     saveCard(card) {
-        return axios.post(CARD_BASE_REST_API_URL, card)
+        var token = localStorage.getItem("jwt_token");
+        return axios.post(CARD_BASE_REST_API_URL, card, {headers: {Authorization: `Bearer ${token}`}})
     }
 
     getCardById(cardId) {
-        return axios.get(CARD_BASE_REST_API_URL + "/" + cardId)
+        var token = localStorage.getItem("jwt_token");
+        return axios.get(CARD_BASE_REST_API_URL + `/${cardId}`,
+            {headers: {Authorization: `Bearer ${token}`}})
     }
 
-    updateCardById(cardId, card) {
-        return axios.put(CARD_BASE_REST_API_URL + "/" + cardId, card)
+    editCardById(cardId, card) {
+        var token = localStorage.getItem("jwt_token");
+        return axios.put(CARD_BASE_REST_API_URL + `/${cardId}`, card,
+            {headers: {Authorization: `Bearer ${token}`}})
     }
 
     deleteCardById(cardId) {
-        return axios.delete(CARD_BASE_REST_API_URL + "/" + cardId)
+        var token = localStorage.getItem("jwt_token");
+        return axios.delete(CARD_BASE_REST_API_URL + `/${cardId}`,
+            {headers: {Authorization: `Bearer ${token}`}})
     }
 }
 
