@@ -5,6 +5,7 @@ import by.evgen.authenticationservice.model.Role;
 import by.evgen.authenticationservice.service.AuctionUserService;
 import by.evgen.authenticationservice.service.AuthenticationService;
 import by.evgen.authenticationservice.service.JwtService;
+import by.evgen.authenticationservice.service_api.AuctionServiceApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -32,6 +33,7 @@ public class AuthenticationController {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
+    private final AuctionServiceApi auctionServiceApi;
     private final RestTemplate template;
 
     @RequestMapping(value = "/signUp", method = RequestMethod.POST)
@@ -44,14 +46,15 @@ public class AuthenticationController {
             id = userData.getKey();
         }
         if (!request.getRole().equals(Role.ADMIN)) {
-            template.exchange(
-                    "http://localhost:8085/api/v1/basket/create",
-                    HttpMethod.POST,
-                    new HttpEntity<>("some body",
-                            createHeadersForSecurity(id, request.getRole().name())),
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
+//            template.exchange(
+//                    "http://localhost:8085/api/v1/basket/create",
+//                    HttpMethod.POST,
+//                    new HttpEntity<>("some body",
+//                            createHeadersForSecurity(id, request.getRole().name())),
+//                    new ParameterizedTypeReference<>() {
+//                    }
+//            );
+            auctionServiceApi.createBasket(id, request.getRole().name());
         }
         return new ResponseEntity<>(new AuthenticationResponse(token, request.getRole().name()), HttpStatus.OK);
     }

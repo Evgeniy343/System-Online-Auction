@@ -3,6 +3,7 @@ package by.evgen.userservice.controller;
 import by.evgen.userservice.dto.AuctionUserDTO;
 import by.evgen.userservice.model.Role;
 import by.evgen.userservice.service.AuctionUserService;
+import by.evgen.userservice.service_api.AuctionServiceApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -24,6 +25,7 @@ public class AuctionUserController {
     private static final String AUCTION_USER_SAVED_MESSAGE = "Auction user has been saved!";
     private final AuctionUserService userService;
     private final RestTemplate template;
+    private final AuctionServiceApi auctionServiceApi;
 
 
     @RequestMapping(value = "/hello-user", method = RequestMethod.GET)
@@ -53,14 +55,15 @@ public class AuctionUserController {
     public ResponseEntity<String> saveAuctionUser(@Valid @RequestBody AuctionUserDTO auctionUserDTO) {
         AuctionUserDTO savedUser = userService.save(auctionUserDTO);
         if (!savedUser.getRole().equals(Role.ADMIN)) {
-            template.exchange(
-                    "http://localhost:8085/api/v1/basket/create",
-                    HttpMethod.POST,
-                    new HttpEntity<>("some body",
-                            createHeadersForSecurity(savedUser.getId(), savedUser.getRole().name())),
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
+//            template.exchange(
+//                    "http://localhost:8085/api/v1/basket/create",
+//                    HttpMethod.POST,
+//                    new HttpEntity<>("some body",
+//                            createHeadersForSecurity(savedUser.getId(), savedUser.getRole().name())),
+//                    new ParameterizedTypeReference<>() {
+//                    }
+//            );
+            auctionServiceApi.createBasket(savedUser.getId(), savedUser.getRole().name());
         }
         return new ResponseEntity<>(String.format(AUCTION_USER_SAVED_MESSAGE), HttpStatus.OK);
     }
@@ -78,30 +81,33 @@ public class AuctionUserController {
                                                         @PathVariable @Min(0) Long id) {
         AuctionUserDTO deletedUser = userService.delete(id);
         if (!deletedUser.getRole().equals(Role.ADMIN)) {
-            template.exchange(
-                    "http://localhost:8085/api/v1/basket/delete/"+ id,
-                    HttpMethod.DELETE,
-                    new HttpEntity<>("some body",
-                            createHeadersForSecurity(userId, role)),
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
-            template.exchange(
-                    "http://localhost:8085/api/v1/auctions/delete/" + id,
-                    HttpMethod.DELETE,
-                    new HttpEntity<>("some body",
-                            createHeadersForSecurity(userId, role)),
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
-            template.exchange(
-                    "http://localhost:8085/api/v1/bids/delete/" + id,
-                    HttpMethod.DELETE,
-                    new HttpEntity<>("some body",
-                            createHeadersForSecurity(userId, role)),
-                    new ParameterizedTypeReference<>() {
-                    }
-            );
+//            template.exchange(
+//                    "http://localhost:8085/api/v1/basket/delete/"+ id,
+//                    HttpMethod.DELETE,
+//                    new HttpEntity<>("some body",
+//                            createHeadersForSecurity(userId, role)),
+//                    new ParameterizedTypeReference<>() {
+//                    }
+//            );
+//            template.exchange(
+//                    "http://localhost:8085/api/v1/auctions/delete/" + id,
+//                    HttpMethod.DELETE,
+//                    new HttpEntity<>("some body",
+//                            createHeadersForSecurity(userId, role)),
+//                    new ParameterizedTypeReference<>() {
+//                    }
+//            );
+//            template.exchange(
+//                    "http://localhost:8085/api/v1/bids/delete/" + id,
+//                    HttpMethod.DELETE,
+//                    new HttpEntity<>("some body",
+//                            createHeadersForSecurity(userId, role)),
+//                    new ParameterizedTypeReference<>() {
+//                    }
+//            );
+            auctionServiceApi.deleteBasket(userId, role, id);
+            auctionServiceApi.deleteAllAuctionsByUserId(userId, role, id);
+            auctionServiceApi.deleteAllBidsByUserId(userId, role, id);
         }
         return new ResponseEntity<>(String.format(AUCTION_USER_DELETED_MESSAGE, id), HttpStatus.OK);
     }

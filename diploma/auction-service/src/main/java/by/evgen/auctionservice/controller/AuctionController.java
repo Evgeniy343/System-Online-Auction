@@ -4,6 +4,7 @@ import by.evgen.auctionservice.dto.AuctionDTO;
 import by.evgen.auctionservice.dto.ProductDTO;
 import by.evgen.auctionservice.model.Status;
 import by.evgen.auctionservice.service.AuctionService;
+import by.evgen.auctionservice.service_api.ProductServiceApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -30,6 +31,7 @@ public class AuctionController {
     private static final String AUCTION_SAVED_MESSAGE = "Auction has been saved!";
     private final AuctionService auctionService;
     private final RestTemplate template;
+    private final ProductServiceApi productServiceApi;
 
     @RequestMapping(value = "/hello-auction", method = RequestMethod.GET)
     public String hello() {
@@ -44,13 +46,14 @@ public class AuctionController {
         if (auctionDTO.getTradingCloseTime().compareTo(obtainCurrentDateAndTime()) < 0) {
             auctionDTO.setStatus(Status.COMPLETED);
         }
-        ResponseEntity<ProductDTO> response = template.exchange(
-                "http://localhost:8084/api/v1/products/" + auctionDTO.getProduct().getId(),
-                HttpMethod.GET,
-                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
-                new ParameterizedTypeReference<>() {
-                }
-        );
+//        ResponseEntity<ProductDTO> response = template.exchange(
+//                "http://localhost:8084/api/v1/products/" + auctionDTO.getProduct().getId(),
+//                HttpMethod.GET,
+//                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
+//                new ParameterizedTypeReference<>() {
+//                }
+//        );
+        ResponseEntity<ProductDTO> response = productServiceApi.getProductById(userId, role, id);
         ProductDTO product = response.getBody();
         auctionDTO.setProduct(product);
         return new ResponseEntity<>(auctionDTO, HttpStatus.OK);
@@ -79,12 +82,14 @@ public class AuctionController {
     public ResponseEntity<String> saveAuction(@RequestHeader("id") Long userId,
                                               @RequestHeader("role") String role,
                                               @Valid @RequestBody AuctionDTO auctionDTO) {
-        ResponseEntity<Long> productCreateResponse = template.exchange(
-                "http://localhost:8084/api/v1/products",
-                HttpMethod.POST,
-                new HttpEntity<>(auctionDTO.getProduct(), createHeadersForSecurity(userId, role)),
-                Long.class
-        );
+//        ResponseEntity<Long> productCreateResponse = template.exchange(
+//                "http://localhost:8084/api/v1/products",
+//                HttpMethod.POST,
+//                new HttpEntity<>(auctionDTO.getProduct(), createHeadersForSecurity(userId, role)),
+//                Long.class
+//        );
+        ResponseEntity<Long> productCreateResponse = productServiceApi.saveProduct(userId, role,
+            auctionDTO.getProduct());
         Long productId = productCreateResponse.getBody();
         auctionDTO.getProduct().setId(productId);
         auctionDTO.setUserId(userId);
@@ -99,12 +104,13 @@ public class AuctionController {
                                                     @PathVariable @Min(0) Long id) {
         auctionDTO.setUserId(userId);
         Long productId = auctionService.update(auctionDTO, id);
-        ResponseEntity<String> response = template.exchange(
-                "http://localhost:8084/api/v1/products/" + productId,
-                HttpMethod.PUT,
-                new HttpEntity<>(auctionDTO.getProduct(), createHeadersForSecurity(userId, role)),
-                String.class
-        );
+//        ResponseEntity<String> response = template.exchange(
+//                "http://localhost:8084/api/v1/products/" + productId,
+//                HttpMethod.PUT,
+//                new HttpEntity<>(auctionDTO.getProduct(), createHeadersForSecurity(userId, role)),
+//                String.class
+//        );
+        productServiceApi.updateProductById(userId, role, auctionDTO.getProduct(), id);
         return new ResponseEntity<>(String.format(AUCTION_UPDATED_MESSAGE, id), HttpStatus.OK);
     }
 
@@ -155,13 +161,14 @@ public class AuctionController {
     }
 
     private void setAuctionsWithProductData(Long userId, String role, List<AuctionDTO> auctions) {
-        ResponseEntity<List<ProductDTO>> response = template.exchange(
-                "http://localhost:8084/api/v1/products",
-                HttpMethod.GET,
-                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
-                new ParameterizedTypeReference<>() {
-                }
-        );
+//        ResponseEntity<List<ProductDTO>> response = template.exchange(
+//                "http://localhost:8084/api/v1/products",
+//                HttpMethod.GET,
+//                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
+//                new ParameterizedTypeReference<>() {
+//                }
+//        );
+        ResponseEntity<List<ProductDTO>> response = productServiceApi.getProducts(userId, role);
         List<ProductDTO> products = response.getBody();
         if (products != null) {
             for (AuctionDTO auction : auctions) {
@@ -175,11 +182,12 @@ public class AuctionController {
     }
 
     private void deleteProduct(Long userId, String role, Long productId) {
-        ResponseEntity<String> response = template.exchange(
-                "http://localhost:8084/api/v1/products/" + productId,
-                HttpMethod.DELETE,
-                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
-                String.class
-        );
+//        ResponseEntity<String> response = template.exchange(
+//                "http://localhost:8084/api/v1/products/" + productId,
+//                HttpMethod.DELETE,
+//                new HttpEntity<>("some body", createHeadersForSecurity(userId, role)),
+//                String.class
+//        );
+        productServiceApi.deleteProductById(userId, role, productId);
     }
 }
