@@ -1,6 +1,6 @@
 package by.evgen.userservice.security;
 
-import by.evgen.userservice.model.Role;
+import by.evgen.userservice.api.model.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -10,4 +10,37 @@
     <include file="db/changelog/create-registration-address-table.xml"/>
     <include file="db/changelog/create-requisite-for-return-of-deposit.xml"/>
     <include file="db/changelog/create-user-table.xml"/>
+    <changeSet id="inserts" author="Evgeniy">
+        <sqlFile path="db/inserts/insert_into_copies_of_documents_table.sql"/>
+        <sqlFile path="db/inserts/insert_into_identification_table.sql"/>
+        <sqlFile path="db/inserts/insert_into_registration_address_table.sql"/>
+        <sqlFile path="db/inserts/insert_into_user_table.sql"/>
+        <sqlFile path="db/inserts/insert_requisite_for_return_of_deposit_table.sql"/>
+    </changeSet>
+    <changeSet id="add_foreignkey_constraints" author="Evgeniy">
+        <addForeignKeyConstraint baseTableName="auction_user"
+          baseColumnNames="copies_of_documents_id"
+          constraintName="auction_user_copies_of_documents_id_fk"
+          referencedTableName="copies_of_documents"
+          referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="auction_user"
+          baseColumnNames="identification_id"
+          constraintName="auction_user_identification_id_fk"
+          referencedTableName="identification"
+          referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="auction_user"
+          baseColumnNames="registration_address_id"
+          constraintName="auction_user_registration_address_id_fk"
+          referencedTableName="registration_address"
+          referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint baseTableName="auction_user"
+          baseColumnNames="requisites_for_return_of_deposit_id"
+          constraintName="auction_user_requisites_for_return_of_deposit_id_fk"
+          referencedTableName="requisites_for_return_of_deposit"
+          referencedColumnNames="id"
+        />
+    </changeSet>
 </databaseChangeLog>

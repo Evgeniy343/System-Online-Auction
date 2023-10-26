@@ -50,31 +50,4 @@
         <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
     </changeSet>
 
-    <changeSet id="06" author="Churai Evgeniy">
-        <addForeignKeyConstraint baseTableName="auction_user"
-                                 baseColumnNames="copies_of_documents_id"
-                                 constraintName="auction_user_copies_of_documents_id_fk"
-                                 referencedTableName="copies_of_documents"
-                                 referencedColumnNames="id"
-        />
-        <addForeignKeyConstraint baseTableName="auction_user"
-                                 baseColumnNames="identification_id"
-                                 constraintName="auction_user_identification_id_fk"
-                                 referencedTableName="identification"
-                                 referencedColumnNames="id"
-        />
-        <addForeignKeyConstraint baseTableName="auction_user"
-                                 baseColumnNames="registration_address_id"
-                                 constraintName="auction_user_registration_address_id_fk"
-                                 referencedTableName="registration_address"
-                                 referencedColumnNames="id"
-        />
-        <addForeignKeyConstraint baseTableName="auction_user"
-                                 baseColumnNames="requisites_for_return_of_deposit_id"
-                                 constraintName="auction_user_requisites_for_return_of_deposit_id_fk"
-                                 referencedTableName="requisites_for_return_of_deposit"
-                                 referencedColumnNames="id"
-        />
-    </changeSet>
-
 </databaseChangeLog>

@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 @Component
 public class LoggingControllerAspect {
 
-    @Pointcut("within(by.evgen.userservice.controller.AuctionUserController)")
+    @Pointcut("within(by.evgen.userservice.api.controller.AuctionUserController)")
     public void logAuctionUserController() {
     }
 
