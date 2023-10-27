@@ -1,7 +1,9 @@
 server:
-  port: 8761
+  port: ${EUREKA_PORT}
 
 spring:
+  config:
+    import: D:\diploma\System-Online-Auction\diploma\.env
   application:
     name: eureka-server
 
@@ -15,6 +17,6 @@ logging:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
     register-with-eureka: false
     fetch-registry: false

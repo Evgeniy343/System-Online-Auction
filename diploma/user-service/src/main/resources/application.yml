@@ -1,13 +1,15 @@
 server:
-  port: 8080
+  port: ${USER_SERVICE_PORT}
 
 spring:
+  config:
+    import: D:\diploma\System-Online-Auction\diploma\.env
   application:
     name: user-service
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${USER_SERVICE_POSTGRES_HOST}:${USER_SERVICE_POSTGRES_PORT}/${USER_SERVICE_POSTGRES_DATABASE_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   jpa:

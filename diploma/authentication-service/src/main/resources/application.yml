@@ -1,15 +1,17 @@
 server:
-  port: 8083
+  port: ${AUTHENTICATION_SERVICE_PORT}
 
 spring:
+  config:
+    import: D:\diploma\System-Online-Auction\diploma\.env
   application:
     name: authentication-service
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   datasource:
-    url: jdbc:postgresql://localhost:5435/user_db
-    username: postgres
-    password: 27112001jeka
+    url: jdbc:postgresql://${USER_SERVICE_POSTGRES_HOST}:${USER_SERVICE_POSTGRES_PORT}/${USER_SERVICE_POSTGRES_DATABASE_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
@@ -18,4 +20,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/

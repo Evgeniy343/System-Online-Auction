@@ -1,13 +1,15 @@
 server:
-  port: 8082
+  port: ${CARD_SERVICE_PORT}
 
 spring:
+  config:
+    import: D:\diploma\System-Online-Auction\diploma\.env
   application:
     name: card-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/card_db
-    username: postgres
-    password: 27112001jeka
+    url: jdbc:postgresql://${CARD_SERVICE_POSTGRES_HOST}:${CARD_SERVICE_POSTGRES_PORT}/${CARD_SERVICE_POSTGRES_DATABASE_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   jpa:
@@ -20,9 +22,9 @@ spring:
     enabled: true
     change-log: db/changelog/changelog-master.xml
 
-STRIPE_SECRET_KEY: sk_test_51MqBt7Cl0EwdlG8RyHhLMZhIvkGiYNhCVnJTvsRm2nM0zB8ugjFVsk8McbraB8VDVjdF96qRdTFCQ9wnScOnH4hC00XYf6tUiX
+STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/

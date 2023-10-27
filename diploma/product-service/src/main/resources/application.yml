@@ -1,13 +1,15 @@
 server:
-  port: 8084
+  port: ${PRODUCT_SERVICE_PORT}
 
 spring:
+  config:
+    import: D:\diploma\System-Online-Auction\diploma\.env
   application:
     name: product-service
   datasource:
-    url: jdbc:postgresql://localhost:5434/product_db
-    username: postgres
-    password: 27112001jeka
+    url: jdbc:postgresql://${PRODUCT_SERVICE_POSTGRES_HOST}:${PRODUCT_SERVICE_POSTGRES_PORT}/${PRODUCT_SERVICE_POSTGRES_DATABASE_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   jpa:
@@ -23,4 +25,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
