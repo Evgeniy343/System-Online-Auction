@@ -48,6 +48,33 @@ services:
     ports:
       - "9411:9411"
 
+  keycloak:
+    image: jboss/keycloak:4.0.0.Final
+    restart: on-failure
+    command:
+      - "-b"
+      - "0.0.0.0"
+      - "-Dkeycloak.migration.action=import"
+      - "-Dkeycloak.migration.provider=dir"
+      - "-Dkeycloak.migration.dir=/config/"
+      - "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
+    volumes:
+      - ./config:/config/
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=password
+      - DB_VENDOR=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=27112001jeka
+      - DB_ADDR=user-database
+      - DB_PORT=5432
+      - DB_DATABASE=user_db
+    ports:
+      - "8090:8080"
+    depends_on:
+      - keycloak-db
+
+
   user-service:
     build:
       context: ./user-service
@@ -137,8 +164,6 @@ services:
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=27112001jeka'
       - 'POSTGRES_DB=user_db'
-    env_file:
-      - .env
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U habrpguser -d habrdb" ]
       interval: 10s
